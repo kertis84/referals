@@ -12,10 +12,14 @@
 ## Django backend
 
 **/referals_back**
+python.exe -m venv venv
+\venv\Scripts\activate.bat
+pip install -r requirements.txt
+python.exe manage.py migrate
 
 
 ## React frontend
 
 **/referals_front**
-
-
+npm install
+npm start
