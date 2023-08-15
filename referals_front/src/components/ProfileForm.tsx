@@ -20,7 +20,7 @@ const ProfileForm = () => {
     const [userProfile, setUserProfile] = useState({} as IUserProfile);
     const [userReferals, setUserReferals] = useState([] as IReferal[]);
     const [userParent, setUserParent] = useState('');
-    const [userHasNotParent, setUserHasNotParent] = useState(true);
+    const [userHasParent, setUserHasParent] = useState(false);
     const [profileChanged, setProfileChanged] = useState(false);
 
     // однократно при запуске
@@ -37,8 +37,10 @@ const ProfileForm = () => {
 
         // получаем реферера (может быть только один)
         $api.get<IReferal>(API_URL + 'referals/parent').then((res) => {
-            setUserParent(res.data.phone);
-            setUserHasNotParent(false);
+            if (res.data.phone !== undefined) {
+                setUserParent(res.data.phone);
+                setUserHasParent(true);
+            }
         }).catch((err) => { err instanceof AxiosError && err.response?.status !== 404 && console.error(err) });
 
     }, []);
@@ -71,7 +73,7 @@ const ProfileForm = () => {
             $api.post<IReferal>(API_URL + 'referals/activate', JSON.stringify({ invite_code: event.currentTarget.value }))
                 .then((res) => {
                     setUserParent(res.data.phone);
-                    setUserHasNotParent(false);
+                    setUserHasParent(true);
                 }).catch((err) => { err instanceof AxiosError && err.response?.status === 404 && alert('Инвайт-код не существует') });
         }
     }
@@ -126,11 +128,11 @@ const ProfileForm = () => {
                         </Col>
                         <Col>
                             <FormGroup controlId='parent' className='my-3'>
-                                {userHasNotParent ?
+                                {!userHasParent ?
                                     <FormLabel>Активировать инвайт-код</FormLabel> :
                                     <FormLabel>Вы активировали инвайт-код пользователя</FormLabel>
                                 }
-                                <FormControl type='text' value={userParent} disabled={!userHasNotParent} maxLength={6}
+                                <FormControl type='text' value={userParent} disabled={userHasParent} maxLength={6}
                                     onChange={handleChangeParent}
                                     onKeyDown={handleKeyDownParent} />
                             </FormGroup>

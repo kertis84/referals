@@ -31,7 +31,7 @@ class ReferalView(views.APIView):
     
     def activate_invitation_serializer(self, request):
         invite_code = request.data.get('invite_code')
-        parent = User.objects.filter(user_ref=invite_code).first()
+        parent = User.objects.filter(user_ref=invite_code).exclude(id=request.user).first()
         if invite_code is None or parent is None:
             raise exceptions.NotFound()
         data = {'parent_user': parent.id, 'child_user': request.user.id}
