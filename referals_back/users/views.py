@@ -10,12 +10,13 @@ from django.contrib.auth import login, logout
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
+    http_method_names = ['get', 'patch', 'head', 'options']
 
     def filter_queryset(self, queryset):
         queryset = queryset.filter(id=self.request.user.id, is_active=True)
         return super().filter_queryset(queryset)
 
-    
+
 class ReferalView(views.APIView):
     queryset = Referal.objects.all()
 
@@ -31,7 +32,7 @@ class ReferalView(views.APIView):
     
     def activate_invitation_serializer(self, request):
         invite_code = request.data.get('invite_code')
-        parent = User.objects.filter(user_ref=invite_code).exclude(id=request.user).first()
+        parent = User.objects.filter(user_ref=invite_code).exclude(id=request.user.id).first()
         if invite_code is None or parent is None:
             raise exceptions.NotFound()
         data = {'parent_user': parent.id, 'child_user': request.user.id}
@@ -96,10 +97,7 @@ class LoginView(views.APIView):
 
 
 class LogoutView(views.APIView):
-
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return Response({'detail': 'You\'re not logged in.'}, status=status.HTTP_400_BAD_REQUEST)
         logout(request)
         return Response({'detail': 'Successfully logged out.'}, status=status.HTTP_200_OK)
 

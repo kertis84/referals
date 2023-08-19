@@ -1,27 +1,10 @@
 import uuid
 from django.db import models
-from django.utils import timezone, crypto
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from backend.models import BaseModel
-
-
-class CodeGenerator(object):
-    allowed_symbols="abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789!@#$%^&*()+-=/:;<>.,"
-    allowed_chars="abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789"
-    allowed_nums="0123456789"
-
-    @classmethod
-    def get_nums(self, length=4):
-        return crypto.get_random_string(length, self.allowed_nums)
-    
-    @classmethod
-    def get_chars(self, length=6):
-        return crypto.get_random_string(length, self.allowed_chars)
-
-    @classmethod
-    def get_symbols(self, length):
-        return crypto.get_random_string(length, self.allowed_chars)
+from users.utils import CodeGenerator
 
 
 class CustomAccountManager(BaseUserManager):
@@ -69,6 +52,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.phone
+
+    @staticmethod
+    def create_random_user():
+        return User.objects.create(phone='+7' + CodeGenerator.get_nums(10))
 
 
 class SmsCode(models.Model):

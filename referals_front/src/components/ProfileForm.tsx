@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import $api, { API_URL } from '../services/axios';
 import moment from "moment";
-import { FormControlElement, IApiArray, IReferal, IUserProfile } from '../models/interfaces';
+import { FormControlElement, IReferal, IUserProfile } from '../models/interfaces';
 import { AxiosError } from 'axios';
 
 
@@ -26,8 +26,8 @@ const ProfileForm = () => {
     // однократно при запуске
     useEffect(() => {
         // получаем профиль
-        $api.get<IApiArray<IUserProfile>>(API_URL + 'user/').then((res) => {
-            setUserProfile(res.data.results[0]);
+        $api.get<IUserProfile[]>(API_URL + 'user/').then((res) => {
+            setUserProfile(res.data[0]);
         }).catch((err) => { err instanceof AxiosError && err.response?.status !== 404 && console.error(err) });
 
         // получаем рефералов

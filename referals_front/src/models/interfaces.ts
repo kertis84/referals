@@ -1,4 +1,3 @@
-
 export type FormControlElement = HTMLInputElement | HTMLTextAreaElement;
 
 export interface IUserProfile {
@@ -9,13 +8,6 @@ export interface IUserProfile {
     last_name: string;
     user_ref: string;
     date_joined: string;
-}
-
-export interface IApiArray<T> {
-    count: number;
-    next: string;
-    previous: string;
-    results: T[];
 }
 
 export interface IReferal {
