@@ -19,7 +19,7 @@ function App() {
 
     return (
         <>
-            <div className="App">
+            <div className="App" role='appdiv'>
                 {is_logined ?
                     <>
                         <div style={{ marginTop: "10rem" }}><b>Вы вошли в систему</b></div>

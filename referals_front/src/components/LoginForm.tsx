@@ -96,7 +96,8 @@ const LoginForm = (props: ILoginFormProps) => {
                         </FormGroup>
                         :
                         <FormGroup controlId='code' className='my-3 w-75 mx-auto'>
-                            <OtpInput numInputs={4} value={otp} onChange={handleChangeOTP} inputStyle='inputStyle' containerStyle={formErrors.code ? 'centerXY is-invalid' : 'centerXY'}
+                            <OtpInput numInputs={4} value={otp} onChange={handleChangeOTP} inputStyle='inputStyle'
+                                containerStyle={formErrors.code ? 'centerXY is-invalid' : 'centerXY'}
                                 renderInput={(props) => <input {...props} />} shouldAutoFocus />
                             <span className='invalid-feedback text-center'>*{formErrors.code}</span>
                             {formErrors.code &&
